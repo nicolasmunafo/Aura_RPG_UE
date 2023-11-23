@@ -19,4 +19,12 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	/*
+		Weapon as skeletal mesh component
+		Like a raw pointer, has access tracking (track how often the pointer is accessed) and lazy loading (an asset cannot be loaded until it's actually needed
+		UPROPERTY - Variable used in UE Editor, EditAnywhere: it can be edited by property windows
+	*/
+	UPROPERTY(EditAnywhere, Category = "Combat")
+	TObjectPtr<USkeletalMeshComponent> Weapon;
+
 };
