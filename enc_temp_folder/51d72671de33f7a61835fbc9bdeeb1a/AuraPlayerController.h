@@ -29,15 +29,12 @@ protected:
 	virtual void SetupInputComponent() override;
 	
 private:
-	// To associate the IMC created in the UE editor
 	UPROPERTY(EditAnywhere, Category="Input")
 	TObjectPtr<UInputMappingContext> AuraContext;
 
-	// To associate the Input Action/IA created in the UE editor
 	UPROPERTY(EditAnywhere, Category = "Input")
 	TObjectPtr<UInputAction> MoveAction;
 
-	// Reads the data as an input action value
 	void Move(const FInputActionValue& InputActionValue);
 
 };

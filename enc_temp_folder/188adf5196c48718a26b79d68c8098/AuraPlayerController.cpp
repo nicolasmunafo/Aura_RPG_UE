@@ -59,24 +59,8 @@ void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
 	// Get the XY axis from the input
 	const FVector2D InputAxisVector = InputActionValue.Get<FVector2D>();
 
-	// Add movement to the controlled pawn in the forward and right direction based on the FVector2
-	// We have to get the direction of the controller to know what is forward
 	const FRotator Rotation = GetControlRotation();
-	const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);		// To store only the yaw (rotation in XY plane)
+	const FRotator YawRotation(0.f, Rotation.Yaw, 0.f);
 
-	// To get the forward and right normalized vectors from the rotator
-	// The controller's rotation is the rotation of the vector from the camera to the character
 	const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-	const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-
-	// Do not assert because move can be called many times per tick
-	if (APawn* ControlledPawn = GetPawn<APawn>()) {
-		// Add movement considering the forward direction with the scale given by the Y vector from the input action (W or S)
-		ControlledPawn->AddMovementInput(ForwardDirection, InputAxisVector.Y);
-
-		// Add movement considering the right direction with the scale given by the X vector from the input action (A or D)
-		ControlledPawn->AddMovementInput(RightDirection, InputAxisVector.X);
-
-	}
-
 }
