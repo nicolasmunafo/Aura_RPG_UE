@@ -2,28 +2,43 @@
 
 
 #include "Character/AuraEnemy.h"
+#include "Aura/Aura.h"
 
 AAuraEnemy::AAuraEnemy()
 {
 	PrimaryActorTick.bCanEverTick = true;
+	GetMesh()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);	// To block visibility of the mesh (to highlight enemies with the cursor)
 }
 
 void AAuraEnemy::HighlightActor()
 {
-	bHighlighted = true;
+	GetMesh()->SetRenderCustomDepth(true);
+	GetMesh()->SetCustomDepthStencilValue(CUSTOM_DEPTH_RED);
+
+	// Another way is just getting "Weapon" as it is part of the AuraCharacter
+	USkeletalMeshComponent* WeaponComp = Cast<USkeletalMeshComponent>(GetMesh()->GetChildComponent(0));
+	WeaponComp->SetRenderCustomDepth(true);
+	WeaponComp->SetCustomDepthStencilValue(CUSTOM_DEPTH_RED);
+	//bHighlighted = true;
 }
 
 void AAuraEnemy::UnHighlightActor()
 {
-	bHighlighted = false;
+	GetMesh()->SetRenderCustomDepth(false);
+	GetMesh()->SetCustomDepthStencilValue(0);
+	USkeletalMeshComponent* WeaponComp = Cast<USkeletalMeshComponent>(GetMesh()->GetChildComponent(0));
+	WeaponComp->SetRenderCustomDepth(false);
+	WeaponComp->SetCustomDepthStencilValue(0);
+	
+	//bHighlighted = false;
 }
 
 void AAuraEnemy::Tick(float deltaSeconds)
 {
 	Super::Tick(deltaSeconds);
 	
-	if (bHighlighted) {
+	/*if (bHighlighted) {
 		FVector SpherePosition = GetActorLocation();
 		DrawDebugSphere(GetWorld(), SpherePosition, 20.f, 16, FColor::Blue);
-	}
+	}*/
 }
