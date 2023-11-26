@@ -5,12 +5,82 @@
 
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
+#include "Interaction/EnemyInterface.h"
 
 AAuraPlayerController::AAuraPlayerController()
 {
 	bReplicates = true;		// When an entity changes on the server, the change will replicate or be sent down to the client
 
 }
+
+void AAuraPlayerController::PlayerTick(float DeltaTime)
+{
+	Super::PlayerTick(DeltaTime);
+
+	CursorTrace();	// It will get the hit result from the cursor
+
+
+}
+
+
+void AAuraPlayerController::CursorTrace()
+{
+	FHitResult CursorHit;
+	GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, false, CursorHit);	// Performs a trace from the cursor to the map and checks if there is a hit
+
+	if (!CursorHit.bBlockingHit) return;
+
+	LastActor = ThisActor;	// Store the previous actor that was highlighted
+	ThisActor = Cast<IEnemyInterface>(CursorHit.GetActor());	// Get the current actor that has been hit under the cursor trace
+
+	/** 
+	*	Line trace from cursor. There are several scenarios:
+	* A. LastActor is null && ThisActor is null
+	*			- Do nothing
+	* B. LastActor is null && ThisActor is valid
+	*			- Highlight ThisActor
+	* C. LastActor is valid && ThisActor is null
+	*			- UnHighlight LastActor
+	* D. LastActor is valid && ThisActor is valid but LastActor != ThisActor
+	*			- UnHighlight LastActor
+	*			- Highlight ThisActor
+	* E. LastActor is valid && ThisActor is valid && LastActor == ThisActor
+	*			- Do nothing
+	* 
+	*/
+
+	if (LastActor == nullptr) {
+		if (ThisActor != nullptr) {
+			// Case B
+
+			ThisActor->HighlightActor();
+		}
+		else {
+			// Case A - Both are null, do nothing
+		}
+	}
+	else { // LastActor is valid
+		if (ThisActor == nullptr) {
+			// Case C
+			LastActor->UnHighlightActor();
+		}
+		else { // Both actors are valid
+			if (LastActor != ThisActor) {
+				// Case D
+				LastActor->UnHighlightActor();
+				ThisActor->HighlightActor();
+			}
+			else {
+				// Case E - Do nothing
+			}
+		}
+	}
+
+
+
+
+}
+
 
 void AAuraPlayerController::BeginPlay()
 {

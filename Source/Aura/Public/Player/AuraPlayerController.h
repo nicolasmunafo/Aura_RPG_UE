@@ -10,6 +10,7 @@
 class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
+class IEnemyInterface;
 
 /**
  * 
@@ -21,6 +22,7 @@ class AURA_API AAuraPlayerController : public APlayerController
 
 public:
 	AAuraPlayerController();
+	virtual void PlayerTick(float DeltaTime) override;
 
 protected:
 	virtual void BeginPlay() override;
@@ -39,5 +41,10 @@ private:
 
 	// Reads the data as an input action value
 	void Move(const FInputActionValue& InputActionValue);
+
+	// To detect the movement of the cursor
+	void CursorTrace();
+	IEnemyInterface* LastActor;	// Pointer to the last actor that was highlighted (to unhighlight if it was highlighted)
+	IEnemyInterface* ThisActor;	// Pointer to the current actor that is highlighted 
 
 };
