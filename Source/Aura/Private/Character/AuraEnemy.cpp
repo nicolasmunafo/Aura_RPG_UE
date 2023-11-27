@@ -3,11 +3,19 @@
 
 #include "Character/AuraEnemy.h"
 #include "Aura/Aura.h"
+#include "AbilitySystem/AuraAbilitySystemComponent.h"
+#include "AbilitySystem/AuraAttributeSet.h"
 
 AAuraEnemy::AAuraEnemy()
 {
 	PrimaryActorTick.bCanEverTick = true;
 	GetMesh()->SetCollisionResponseToChannel(ECC_Visibility, ECR_Block);	// To block visibility of the mesh (to highlight enemies with the cursor)
+
+	// Create the Ability System Component and Attribute Set
+	AbilitySystemComponent = CreateDefaultSubobject<UAuraAbilitySystemComponent>("AbilitySystemComponent");
+	AbilitySystemComponent->SetIsReplicated(true);	// so that the ASC is replicated in multiplayer
+
+	AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>("AttributeSet");
 }
 
 void AAuraEnemy::HighlightActor()
