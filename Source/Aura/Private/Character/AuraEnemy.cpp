@@ -51,3 +51,15 @@ void AAuraEnemy::Tick(float deltaSeconds)
 		DrawDebugSphere(GetWorld(), SpherePosition, 20.f, 16, FColor::Blue);
 	}*/
 }
+
+void AAuraEnemy::BeginPlay()
+{
+	Super::BeginPlay();
+	
+	// Initialize the ASC of the enemy with the Enemy Pawn for both the owner and the avatar
+	AbilitySystemComponent->InitAbilityActorInfo(this, this);
+	
+	//APawn* EnemyPawn = GetController()->GetPawn();
+	//AbilitySystemComponent->InitAbilityActorInfo(EnemyPawn, EnemyPawn);
+
+}

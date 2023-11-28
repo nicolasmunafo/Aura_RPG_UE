@@ -24,6 +24,9 @@ public:
 
 	virtual void Tick(float deltaSeconds) override;
 
+protected:
+	virtual void BeginPlay() override;
+
 private:
 	bool bHighlighted = false;
 	
