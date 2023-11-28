@@ -10,6 +10,7 @@ AAuraPlayerState::AAuraPlayerState()
 	// Create the Ability System Component and Attribute Set
 	AbilitySystemComponent = CreateDefaultSubobject<UAuraAbilitySystemComponent>("AbilitySystemComponent");
 	AbilitySystemComponent->SetIsReplicated(true);	// so that the ASC is replicated in multiplayer
+	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);	// Gameplay effects and cues will be replicated from the server to the owning client only
 
 	AttributeSet = CreateDefaultSubobject<UAuraAttributeSet>("AttributeSet");
 	
