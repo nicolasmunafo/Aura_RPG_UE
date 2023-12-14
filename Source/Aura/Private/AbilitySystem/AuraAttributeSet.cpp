@@ -2,13 +2,16 @@
 
 
 #include "AbilitySystem/AuraAttributeSet.h"
-#include "AbilitySystemComponent.h"
 
 // For DOREPLIFETIME_CONDITION_NOTIFY
 #include "Net/UnrealNetwork.h"								
 
 UAuraAttributeSet::UAuraAttributeSet()
 {
+	InitHealth(100.f);
+	InitMaxHealth(100.f);
+	InitMana(50.f);
+	InitMaxMana(50.f);
 }
 
 void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -46,3 +49,50 @@ void UAuraAttributeSet::OnRep_MaxMana(const FGameplayAttributeData& OldMaxMana) 
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UAuraAttributeSet, MaxMana, OldMaxMana);
 }
+
+
+//#define CREATE_ATTRIBUTE(ATTR_NAME) \
+// \
+//	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_#ATTR_NAME, Category = "Vital Attributes")	\
+//		FGameplayAttributeData ATTR_NAME;	\
+//	UFUNCTION()	\
+//		void OnRep_#ATTR_NAME(const FGameplayAttributeData& Old#ATTR_NAME) const;	\
+
+
+
+
+//#define GAMEPLAYATTRIBUTE_REPNOTIFY(ClassName, PropertyName, OldValue) \
+//{ \
+//	static FProperty* ThisProperty = FindFieldChecked<FProperty>(ClassName::StaticClass(), GET_MEMBER_NAME_CHECKED(ClassName, PropertyName)); \
+//	GetOwningAbilitySystemComponentChecked()->SetBaseAttributeValueFromReplication(FGameplayAttribute(ThisProperty), PropertyName, OldValue); \
+//}
+
+/*
+// Mana Attributes
+	
+
+	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_MaxMana, Category = "Vital Attributes")
+	FGameplayAttributeData MaxMana;
+
+	// RepNotify can have 0 or 1 argument, which is the type of the replicated variable
+	// You will automatically get the previous value in RepNotifies, it is an inherent quality of RepNotifies
+	
+
+	UFUNCTION()
+	void OnRep_MaxMana(const FGameplayAttributeData& OldMaxMana) const;
+
+};
+
+
+/* We can use a define to not repeat creating attribute data
+*
+#define REGISTER_DECO(DECO_NAME)  {#DECO_NAME, new CBTDecoratorFactory<CBTDeco##DECO_NAME>()},
+std::map<std::string_view, CBTParser::IBTDecoratorFactory*> CBTParser::decorator_types{
+	#include "bt_decorator_registration.h"
+};
+#undef REGISTER_DECO
+
+
+
+
+*/
