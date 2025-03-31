@@ -44,7 +44,12 @@ private:
 
 	// To detect the movement of the cursor
 	void CursorTrace();
-	IEnemyInterface* LastActor;	// Pointer to the last actor that was highlighted (to unhighlight if it was highlighted)
-	IEnemyInterface* ThisActor;	// Pointer to the current actor that is highlighted 
+
+	TScriptInterface<IEnemyInterface> LastActor; // Pointer to the last actor that was highlighted (to unhighlight if it was highlighted)
+	TScriptInterface<IEnemyInterface> ThisActor; // Pointer to the current actor that is highlighted 
+	
+	// Before it used a raw pointer but now he recommends using a TScriptInterface
+	//IEnemyInterface* LastActor;	
+	//IEnemyInterface* ThisActor;	
 
 };

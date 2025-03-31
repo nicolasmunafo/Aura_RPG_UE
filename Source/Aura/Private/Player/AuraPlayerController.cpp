@@ -90,8 +90,10 @@ void AAuraPlayerController::BeginPlay()
 	// To include the Input Mapping Context, we have to access it through the Enhanced Input Local Player Subsystem
 	// Subsystems are singletons
 	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer());
-	check(Subsystem);	
-	Subsystem->AddMappingContext(AuraContext, 0);
+	if (Subsystem)
+	{
+		Subsystem->AddMappingContext(AuraContext, 0);
+	}
 
 	// Show mouse cursor with a default cursor
 	bShowMouseCursor = true;
